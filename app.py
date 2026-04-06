@@ -93,8 +93,7 @@ def plot_vi_graph(data, method, R_true=None, show_fit=True):
     """Interactive V vs I plot with linear fit"""
     fig = make_subplots(
         rows=1, cols=2,
-        subplot_titles=('V vs I Measurement', 'Resistance Analysis'),
-        specs=[[{"secondary_y": False}, {"secondary_y": False}]]
+        subplot_titles=('V vs I Measurement', 'Resistance Analysis')
     )
     
     # Main V-I plot
@@ -108,7 +107,7 @@ def plot_vi_graph(data, method, R_true=None, show_fit=True):
         row=1, col=1
     )
     
-    if show_fit:
+    if show_fit and len(data) > 1:
         # Linear fit
         z = np.polyfit(data['Current (mA)'], data['Voltage (mV)'], 1)
         p = np.poly1d(z)
@@ -120,11 +119,8 @@ def plot_vi_graph(data, method, R_true=None, show_fit=True):
                       showlegend=True),
             row=1, col=1
         )
-    
-    # Residuals plot
-    if len(data) > 1 and show_fit:
-        z = np.polyfit(data['Current (mA)'], data['Voltage (mV)'], 1)
-        p = np.poly1d(z)
+        
+        # Residuals plot
         residuals = data['Voltage (mV)'] - p(data['Current (mA)'])
         fig.add_trace(
             go.Scatter(x=data['Current (mA)'], y=residuals,
@@ -153,15 +149,14 @@ def plot_vi_graph(data, method, R_true=None, show_fit=True):
     return fig
 
 def draw_two_probe_diagram():
-    """Two-probe diagram"""
+    """Two-probe diagram - fixed version"""
     fig = go.Figure()
     
     # Sample bar
     fig.add_shape(type="rect",
                   x0=0.1, y0=0.3, x1=0.9, y1=0.7,
                   line=dict(color="#2c3e50", width=3),
-                  fillcolor="#34495e",
-                  row=1, col=1)
+                  fillcolor="#34495e")
     
     # Probes
     fig.add_annotation(x=0.15, y=0.85, text="Probe 1<br>(I+, V+)", 
@@ -198,15 +193,14 @@ def draw_two_probe_diagram():
     return fig
 
 def draw_four_probe_diagram():
-    """Four-probe diagram"""
+    """Four-probe diagram - fixed version"""
     fig = go.Figure()
     
     # Sample bar
     fig.add_shape(type="rect",
                   x0=0.1, y0=0.3, x1=0.9, y1=0.7,
                   line=dict(color="#2c3e50", width=3),
-                  fillcolor="#34495e",
-                  row=1, col=1)
+                  fillcolor="#34495e")
     
     # Current probes (outer)
     fig.add_annotation(x=0.2, y=0.85, text="I+", showarrow=True,
